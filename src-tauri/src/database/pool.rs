@@ -18,26 +18,8 @@ impl Database {
         Ok(Database { pool })
     }
 
-    async fn init_schema(pool: &PgPool) -> Result<(), sqlx::Error> {
-        sqlx::query(
-            r#"
-            CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                name VARCHAR(255) NOT NULL,
-                email VARCHAR(255) UNIQUE NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-            "#,
-        )
-        .execute(pool)
-        .await?;
-
-        // Create index on email
-        sqlx::query("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)")
-            .execute(pool)
-            .await?;
-
+    async fn init_schema(_pool: &PgPool) -> Result<(), sqlx::Error> {
+        // Schema initialization is handled by migrations
         Ok(())
     }
 
